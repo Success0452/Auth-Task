@@ -109,7 +109,7 @@ This is an authentication Api.
 ## Available Routes
 
 `Create Account`
-<img src="https://res.cloudinary.com/zuri-team/image/upload/zuriboard/tenant-logo/ms5faj5pae6nd03wazk1.png" width="200" height="50">
+<img src="https://drive.google.com/file/d/1MJ1x9Y8fh1lv9k-f6g6HFUIpAsDQHTiw/view?usp=sharing" width="200" height="50">
 
 
 
