@@ -144,10 +144,6 @@ This is an authentication Api.
 #### Get all blog request
 <img src="https://www.linkpicture.com/q/list-blog.png" width="500" height="300">
 
-#### Logout Account
-<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="300">
-
-
 
 
 

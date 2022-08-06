@@ -86,9 +86,13 @@ const approveManager = async(req, res) => {
 }
 
 const verifyStaff = async(req, res) => {
-    const find = await Auth.findOne({ userId: req.header.userId, role: 'admin' || 'managers' })
+    const find = await Auth.findOne({ userId: req.header.userId })
 
-    if (!find) {
+    if (find.role === "staff") {
+        throw new CustomApiError.UnauthorizedError("you dont have access to this function")
+    }
+
+    if (find.role === "users") {
         throw new CustomApiError.UnauthorizedError("you dont have access to this function")
     }
 
