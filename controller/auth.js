@@ -6,8 +6,6 @@ const Blog = require("../model/blog");
 const Request = require("../model/request");
 const mailer = require("../util/mailer");
 const generateToken = require("../util/generate_token");
-const { response } = require("express");
-
 
 const createAccount = async(req, res) => {
     const { email, fullname, mobile, gender, password, role } = req.body
@@ -47,12 +45,12 @@ const createAccount = async(req, res) => {
         })
     }
     if (first === "managers" || first === "staff") {
-        res.status(StatusCodes.ACCEPTED).json({
-            msg: `your application is been processed`,
-            success: true
-        });
         user.save()
         await Request.create({ userId: userId, role: first })
+        res.status(StatusCodes.ACCEPTED).json({
+            msg: `your application is been processed for verification`,
+            success: true
+        });
     }
 
 }
@@ -87,11 +85,9 @@ const approveManager = async(req, res) => {
 }
 
 const verifyStaff = async(req, res) => {
-    const find = await Auth.findOne({ userId: req.header.userId, role: 'admin' })
+    const find = await Auth.findOne({ userId: req.header.userId, role: 'admin' || 'managers' })
 
-    const manager = await Auth.findOne({ userId: req.header.userId, role: 'managers' })
-
-    if (!admin || !manager) {
+    if (!find) {
         throw new CustomApiError.UnauthorizedError("you dont have access to this function")
     }
 
@@ -104,7 +100,7 @@ const verifyStaff = async(req, res) => {
     }
 
     await Auth.updateOne({ userId: user.userId, role: 'staff' }, { approve: true, verified: true })
-
+    await Request.deleteOne({ userId: user.userId })
     res.status(StatusCodes.ACCEPTED).json({
         msg: "user approved as a staff",
         success: true
@@ -112,11 +108,11 @@ const verifyStaff = async(req, res) => {
 }
 
 const sendVerificationLink = async({ userId, email, role }, res) => {
+    await Auth.updateOne({ userId: userId }, { approve: true, verified: true })
 
     if (!userId || !email) {
         throw new CustomApiError.NotFoundError("email and id or found")
     }
-
     const admin = `<p>Welcome to auth app, you are the admin of this app
     and you have roles of verifying staff and managers, do well to validate
     your account with this link and explore. 
@@ -160,42 +156,34 @@ const login = async(req, res) => {
     const { email, password } = req.body
 
     if (!email || !password) {
-        const err = "id and password are required"
-        return res.render('../views/pages/login', { err: err })
-            // throw new CustomApiError.BadRequestError("id and password are required")
+        throw new CustomApiError.BadRequestError("id and password are required")
     }
 
     const user = await Auth.findOne({ email: email });
 
     if (!user) {
-        const err = "unable to locate user"
-        return res.render('../views/pages/login', { err: err })
-            // throw new CustomApiError.NotFoundError("unable to locate user")
+        throw new CustomApiError.NotFoundError("unable to locate user")
     }
 
     const verify = await user.ComparePassword(password)
 
     if (!verify) {
-        const err = "unable to verify password"
-        return res.render('../views/pages/login', { err: err })
-            // throw new CustomApiError.UnauthenticatedError("unable to verify password")
+        throw new CustomApiError.UnauthenticatedError("unable to verify password")
     }
 
     if (user.verified === false) {
-        // throw new CustomApiError.UnauthenticatedError("user is not verified, check your email")
-        const err = "user is not verified, check your email"
-        return res.render('../views/pages/login', { err: err })
+        throw new CustomApiError.UnauthenticatedError("user is not verified, check your email")
     }
 
+    const generate_token = generateToken(user.userId)
+    req.session.token = generate_token
     const show = await Auth.findOne({ email: email }).select("-password").select("-__v");
-    // res.status(StatusCodes.ACCEPTED).json({
-    //     msg: "account logged in",
-    //     success: true,
-    //     user: show,
-    //     token: generateToken(user.userId)
-    // })
-    // res.status(StatusCodes.ACCEPTED).redirect('/home')
-    res.render('../views/pages/home', { user: show })
+    res.status(StatusCodes.ACCEPTED).json({
+        msg: "account logged in",
+        success: true,
+        user: show,
+        token: req.session.token
+    })
 }
 
 const forgetPassword = async(req, res) => {
@@ -265,12 +253,12 @@ const addBlog = async(req, res) => {
     }
     const blogId = `authId${Math.floor(1000 + Math.random() * 9000)}`;
 
-
-    const { text } = req.body
+    const { title, description } = req.body
     const blog = new Blog({
         blogId: blogId,
-        createdby: admin,
-        text: text,
+        createdby: req.header.userId,
+        title: title,
+        description: description
     })
 
     blog.save()
@@ -279,7 +267,6 @@ const addBlog = async(req, res) => {
         msg: "blog created successfully",
         success: true
     });
-
 }
 
 const updateBlog = async(req, res) => {
@@ -289,9 +276,13 @@ const updateBlog = async(req, res) => {
         throw new CustomApiError.UnauthorizedError("you dont have access to this function")
     }
 
-    const { text, blogId } = req.body
+    const { description, blogId } = req.body
 
-    const blog = await Blog.updateOne({ blogId: blogId }, { text: text })
+    if (!description) {
+        throw new CustomApiError.UnauthorizedError("description to update is required")
+    }
+
+    await Blog.updateOne({ blogId: blogId }, { description: description })
 
 
     res.status(StatusCodes.ACCEPTED).json({
@@ -309,7 +300,7 @@ const deleteBlog = async(req, res) => {
 
     const { blogId } = req.body
 
-    const blog = await Blog.deleteOne({ blogId: blogId })
+    await Blog.deleteOne({ blogId: blogId })
 
     res.status(StatusCodes.ACCEPTED).json({
         msg: "blog deleted successfully",
@@ -318,19 +309,44 @@ const deleteBlog = async(req, res) => {
 }
 
 const listRequest = async(req, res) => {
+    const find = await Auth.findOne({
+        userId: req.header.userId,
+        role: 'admin' || 'managers'
+    })
+
+    if (!find) {
+        throw new CustomApiError.UnauthorizedError("you dont have access to this function")
+    }
+
     const request = await Request.find()
 
     res.status(StatusCodes.ACCEPTED).json(request)
 }
 
 const listBlog = async(req, res) => {
-    const blog = await Blog.find()
+    const find = await Auth.findOne({
+        userId: req.header.userId,
+        role: 'admin' || 'managers' || 'staff' || 'users'
+    })
+
+    if (!find) {
+        throw new CustomApiError.UnauthorizedError("you dont have access to this function")
+    }
+
+    const blog = await Blog.find({ userId: find.userId })
 
     res.status(StatusCodes.ACCEPTED).json(blog)
 }
 
 const logout = async(req, res) => {
-
+    req.session.destory((err) => {
+        if (err) throw new CustomApiError.UnauthorizedError(err)
+            // res.redirect("/")
+        res.status(StatusCodes.OK).json({
+            msg: "successfully logged out",
+            success: true
+        })
+    })
 }
 
 module.exports = {

@@ -6,10 +6,13 @@ const Blog = new mongoose.Schema({
         type: String,
         required: [true, "createdby is required"]
     },
-    text: {
+    title: {
         type: String
     },
     blogId: {
+        type: String
+    },
+    description: {
         type: String
     }
 }, { timestamps: true });

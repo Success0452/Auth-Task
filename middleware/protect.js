@@ -5,7 +5,8 @@ const CustomError = require("../errors")
 
 const protect = async(req, res, next) => {
     let token;
-    const auth = req.headers.authorization;
+    let auth = req.session.token || req.headers.authorization
+
     if (!auth || !auth.startsWith("Bearer ")) {
         throw new CustomError.BadRequestError("Invalid authorization format")
     }
@@ -14,13 +15,12 @@ const protect = async(req, res, next) => {
 
     const decode = jwt.verify(token, process.env.JWT_SECRET)
 
-    req.header = await Auth.findById(decode.id).select("-password")
+    req.header = await Auth.findOne({ userId: decode.id }).select("-password")
 
     req.user = {
         userId: req.header.userId,
         role: req.header.role,
     };
-
     next()
 }
 

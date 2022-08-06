@@ -1,6 +1,6 @@
 require("dotenv").config()
 require("express-async-errors")
-
+const session = require("express-session")
 
 const express = require("express")
 const app = express()
@@ -17,22 +17,22 @@ const errorHandlerError = require("./middleware/error-handler")
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.set('view engine', 'ejs')
+const mongoDBSession = require("connect-mongodb-session")(session)
+
+const store = new mongoDBSession({
+    uri: process.env.MONGO_URI,
+    collection: 'mySessions'
+})
+
+app.use(session({
+    secret: "my secret pin",
+    saveUninitialized: false,
+    resave: false,
+    store: store
+}))
 
 app.get("/", (req, res) => {
-    res.render('pages/login')
-});
-
-app.get("/signup", (req, res) => {
-    res.render('pages/signup')
-});
-
-app.get("/view_note", (req, res) => {
-    res.render('pages/view_note')
-});
-
-app.get("/home", (req, res) => {
-    res.render('pages/home')
+    res.status(200).send("<h1>Welcome to Auth Api</h1>")
 });
 
 app.use("/api/v1", authRoute);
