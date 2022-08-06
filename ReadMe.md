@@ -78,7 +78,7 @@ This is an authentication Api.
 
 
 ## Available Routes
-  In your Command line interface:
+  You can test with these routes:
   
   1. `localhost:3000/api/v1/login` `body{ email and password }` : `POST`
   
@@ -106,7 +106,10 @@ This is an authentication Api.
   
   11. `localhost:3000/api/v1/logout` `POST`
   
+## Available Routes
 
+`Create Account`
+<img src="https://res.cloudinary.com/zuri-team/image/upload/zuriboard/tenant-logo/ms5faj5pae6nd03wazk1.png" width="200" height="50">
 
 
 
