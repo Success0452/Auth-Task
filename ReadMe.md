@@ -109,7 +109,7 @@ This is an authentication Api.
 ## Available Routes
 
 `Create Account`
-<img src="https://www.linkpicture.com/view.php?img=LPic62ee43bfe7931510283" width="200" height="50">
+<img src="https://www.linkpicture.com/q/register_5.png" width="200" height="50">
 
 
 
