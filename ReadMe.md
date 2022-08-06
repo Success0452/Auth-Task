@@ -14,31 +14,31 @@ This is an authentication Api.
 
 ## Access per roles
 
-`Register`: ['admin', 'manager', 'staff', 'users'].
+`Register` ['admin', 'manager', 'staff', 'users'].
 
-`Login`: ['admin', 'manager', 'staff', 'users'].
+`Login` ['admin', 'manager', 'staff', 'users'].
 
-`verify account`: ['admin', 'manager', 'staff', 'users'].
+`verify account` ['admin', 'manager', 'staff', 'users'].
 
-`forget password`: ['admin', 'manager', 'staff', 'users'].
+`forget password` ['admin', 'manager', 'staff', 'users'].
 
-`verify password`: ['admin', 'manager', 'staff', 'users'].
+`verify password` ['admin', 'manager', 'staff', 'users'].
 
-`approve manager`: ['admin'].
+`approve manager` ['admin'].
 
-`approve staff`: ['admin', 'manager'].
+`approve staff` ['admin', 'manager'].
 
-`add blog`: ['admin', 'manager'].
+`add blog` ['admin', 'manager'].
 
-`update blog`: ['admin', 'manager', 'staff'].
+`update blog` ['admin', 'manager', 'staff'].
 
-`delete blog`: ['admin', 'manager'].
+`delete blog` ['admin', 'manager'].
 
-`request list`: ['admin', 'manager'].
+`request list` ['admin', 'manager'].
 
-`blog list`: ['admin', 'manager', 'staff', 'users'].
+`blog list` ['admin', 'manager', 'staff', 'users'].
 
-`logout`: ['admin', 'manager', 'staff', 'users'].
+`logout` ['admin', 'manager', 'staff', 'users'].
 
 ## Tech Stack
 
@@ -80,31 +80,31 @@ This is an authentication Api.
 ## Available Routes
   In your Command line interface:
   
-  1. localhost:3000/api/v1/login  : body{ email and password } : `POST`
+  1. `localhost:3000/api/v1/login` `body{ email and password }` : `POST`
   
-  2. localhost:3000/api/v1/register : body{ email, fullname, mobile, gender, password and role } : `POST`
+  2. `localhost:3000/api/v1/register` `body{ email, fullname, mobile, gender, password and role }` `POST`
   
-  3. localhost:3000/api/v1/verify/account/:id : params{ userId } : `POST`
+  3. `localhost:3000/api/v1/verify/account/:id` `params{ userId }` `POST`
   
-  4. localhost:3000/api/v1/forget/password : body{ email } : : `POST`
+  4. `localhost:3000/api/v1/forget/password` `body{ email }` `POST`
   
-  5. localhost:3000/api/v1/verify/password : params{ id } && body{ newPassword and confirmPassword } : `POST` 
+  5. `localhost:3000/api/v1/verify/password` `params{ id } && body{ newPassword and confirmPassword }` `POST` 
   
-  6. localhost:3000/api/v1/approve/managers : body{ userId } : `POST`
+  6. `localhost:3000/api/v1/approve/managers` `body{ userId }` : `POST`
   
-  7. localhost:3000/api/v1/approve/staff : body{ userId } : `POST`
+  7. `localhost:3000/api/v1/approve/staff` `body{ userId }` : `POST`
   
-  8. localhost:3000/api/v1/add/blog : body{ title, description } : `POST`
+  8. `localhost:3000/api/v1/add/blog` `body{ title, description }` `POST`
 
-  9. localhost:3000/api/v1/update/blog : body{ description, blogId } : `PATCH`
+  9. `localhost:3000/api/v1/update/blog` `body{ description, blogId }` `PATCH`
  
-  10. localhost:3000/api/v1/delete/blog : body{ blogId } : `DELETE`
+  10. `localhost:3000/api/v1/delete/blog` `body{ blogId }` `DELETE`
   
-  11. localhost:3000/api/v1/list/request : `GET`
+  11. `localhost:3000/api/v1/list/request` `GET`
 
-  10. localhost:3000/api/v1/list/blog : `GET`
+  10. `localhost:3000/api/v1/list/blog` `GET`
   
-  11. localhost:3000/api/v1/logout : `POST`
+  11. `localhost:3000/api/v1/logout` `POST`
   
 
 
