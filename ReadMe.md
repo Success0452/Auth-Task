@@ -108,8 +108,8 @@ This is an authentication Api.
   
 ## Available Routes
 
-`Create Account`
-<img src="https://www.linkpicture.com/q/register_5.png" width="200" height="50">
+#### Create Account
+<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="200">
 
 
 
