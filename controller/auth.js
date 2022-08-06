@@ -6,6 +6,7 @@ const Blog = require("../model/blog");
 const Request = require("../model/request");
 const mailer = require("../util/mailer");
 const generateToken = require("../util/generate_token");
+const session = require("express-session")
 
 const createAccount = async(req, res) => {
     const { email, fullname, mobile, gender, password, role } = req.body
@@ -108,8 +109,6 @@ const verifyStaff = async(req, res) => {
 }
 
 const sendVerificationLink = async({ userId, email, role }, res) => {
-    await Auth.updateOne({ userId: userId }, { approve: true, verified: true })
-
     if (!userId || !email) {
         throw new CustomApiError.NotFoundError("email and id or found")
     }
@@ -176,13 +175,13 @@ const login = async(req, res) => {
     }
 
     const generate_token = generateToken(user.userId)
-    req.session.token = generate_token
+    req.session.token = `Bearer ${generate_token}`
     const show = await Auth.findOne({ email: email }).select("-password").select("-__v");
     res.status(StatusCodes.ACCEPTED).json({
         msg: "account logged in",
         success: true,
         user: show,
-        token: req.session.token
+        token: generate_token
     })
 }
 
@@ -201,7 +200,7 @@ const forgetPassword = async(req, res) => {
 
 const sendPasswordLink = async(userId, email, res) => {
 
-    if (!_id || !email) {
+    if (!userId || !email) {
         throw new CustomApiError.NotFoundError("email and id or found")
     }
 
@@ -324,6 +323,7 @@ const listRequest = async(req, res) => {
 }
 
 const listBlog = async(req, res) => {
+    console.log(req.header.userId)
     const find = await Auth.findOne({
         userId: req.header.userId,
         role: 'admin' || 'managers' || 'staff' || 'users'

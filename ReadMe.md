@@ -109,7 +109,43 @@ This is an authentication Api.
 ## Available Routes
 
 #### Create Account
-<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="200">
+<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="300">
+
+#### Login Account
+<img src="https://www.linkpicture.com/q/login_10.png" width="500" height="300">
+
+#### Verify Account
+<img src="https://www.linkpicture.com/q/verify_account.png" width="500" height="300">
+
+#### Forget Password
+<img src="https://www.linkpicture.com/q/forget_1.png" width="500" height="300">
+
+#### Verify Password
+<img src="https://www.linkpicture.com/q/forget-password.png" width="500" height="300">
+
+#### Approve Manager Account
+<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="300">
+
+#### Approve Staff Account
+<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="300">
+
+#### Add Blog
+<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="300">
+
+#### Update Blog
+<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="300">
+
+#### Delete Blog
+<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="300">
+
+#### Get all list request
+<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="300">
+
+#### Get all blog request
+<img src="https://www.linkpicture.com/q/list-blog.png" width="500" height="300">
+
+#### Logout Account
+<img src="https://www.linkpicture.com/q/register_5.png" width="500" height="300">
 
 
 
